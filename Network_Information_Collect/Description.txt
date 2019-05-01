@@ -1,0 +1,76 @@
+Descriptions and Initial Configuration:
+This project runs simple playbooks to gather information from the simulation created in GNS3. The topolgy can be found in this directory under the name Network_Diagram.png
+Described below are the various devices used in this network and thier inital configurations.
+
+	1) Network Automation Appliance: A container offered by GNS3 that provides the popular tools required for network automation: Netmiko, NAPALM, Pyntc and Ansible. 
+	This container serves as our primary admin laptop/desktop which we will use to SSH into all our other network devices to automate their config and management using ansible after initial configuration.
+	
+	Initial Configuration:
+	• The NAA(network automation appliance) is setup with a static ip address of 10.1.1.20 255.255.255.0. Since this is a linux device, this is achieved by accessing the interfaces file in /etc/network/interfaces and uncommenting the static interface setup lines and assigning the ip address
+	
+	Step1: #nano /etc/network/interfaces (to edit the interfaces file using the nano editor)
+	Step2: uncomment following lines to setup static ip.
+	Auto eth0
+	Iface eth0 inet static
+		Address 10.1.1.20
+		Netmask 255.255.255.0
+	Note: We are not setting up a gateway or dns server here because we are not accessing the internet. This project is limited to our internal network.
+	
+	2) Cisco IOSvL2 Appliance: This appliance allows us to run an IOS switching image on our standard computer using our GNS3 VM. This is what we're using for our four Multilayer switches(S1,S2,S3,S4). This topology is designed in our typical access + collapsed core cisco design. The switches are initially configured thus:
+	
+	Initial Configuration:
+	• Hostnames and login/password are set up are setup and SSH is enabled on all switches
+	Example:
+	#conf t
+	#hostname S1
+	#username admin password ansible 
+	#username admin privilege 15
+	#line vty 0 4
+	#login local
+	#transport input all
+	#ip domain-name cciepython.com
+	#crypto key generate rsa
+	1024
+	
+	• All the ports on our L3 switches that connect to other L3/L2 switches are configured as trunk ports.
+	Example: 
+	#conf t
+	#int gi0/0
+	#switchport trunk encapsulation dot1q
+	#switchport mode trunk
+	
+	Incase of etherchannel as between S1 and S2
+	#int port-channel 1
+	#switchport trunk encap dot1q
+	#switchport mode trunk
+	
+	• Etherchannel is setup between S1 and S2.
+	Example:
+	#int range gi1/0 - 1
+	#Channel-group 1 desirable
+	
+	• All ports connecting to PCs are setup as access ports.(i.e, S3- gi2/0 and Switch - e0)
+	Example:
+	#int gi2/0
+	#switchport mode access
+	
+	• Each L3 switch is setup with an Ip address( S1 - 10.1.1.1, S2 - 10.1.1.2, S3 - 10.1.1.3 , S4 - 10.1.1.4) using Switch Virtual Interfaces or SVIs.
+	Example:
+	#int vlan 1
+	#ip address 10.1.1.1 255.255.255.0
+	#no shut
+	
+	3) Ubuntu Docker Guest Appliance: This serves as just another client PC within the network running Ubuntu. Ubuntu is a Debian-based Linux OS with Unity as its default desktop environment. This is also set up with a static ip address of 10.1.1.21 255.255.255.0. The setup is the same as for the network automation appliance.
+
+
+Configuring host resolution on NAA:
+#Nano /etc/hosts
+
+In the hosts file, add the following under the existing hosts:
+10.1.1.1 S1
+10.1.1.2 S2
+10.1.1.3 S3
+10.1.1.4 S4
+
+Verifying that SSH works:
+#ssh admin@S1.(if it works you should be prompted for the password and be able to login to the switch from the NAA.
