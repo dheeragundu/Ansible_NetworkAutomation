@@ -1,0 +1,20 @@
+#simple playbook to view mac-address table information.
+
+---
+- name: Get MAC information
+  hosts: all
+  order: sorted
+  gather_facts: false
+  
+  tasks:
+    - name: show MAC
+      raw: "show mac address-table"
+      register: print_output
+      
+    - name: print output
+      debug:
+        var: print_output.stdout_lines
+        
+#Command to run:
+#ansible-playbook getmac1.yml -u <your username> -k
+#ansible-playbook getmac1.yml -u admin -k | grep"ok:\|19fb"
