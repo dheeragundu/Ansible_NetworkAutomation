@@ -1,4 +1,4 @@
-#Playbook that backs  up results of our ios_commands to a file created in the  following format <hostname.txt> in  a directory called output.
+#Playbook that backs  up results of our ios_commands to a file created in the  following format <hostname.txt> in  a directory called "output".
 
 
 ---
@@ -23,3 +23,6 @@
       copy: # module
         content: "{{ print_output.stdout[0]  }}"
         dest: "./output/{{ inventory_hostname )).txt"
+        
+#Command to run:
+#ansible-playbook showver.yml -u <your username> -k
