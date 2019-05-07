@@ -1,0 +1,15 @@
+
+
+Initial Configuration:
+- Set both the router and the Network Automation Appliance to receive ip addresses via dhcp from the NAT cloud.
+
+NAA:
+- Go into nano /etc/network/interfaces
+- And uncomment the two lines below the dhcp option.
+
+R1:
+- Configure FastEthernet0/0 to receive ip address via dhcp
+
+#conft
+#int fa0/0
+#ip address dhcp
