@@ -5,9 +5,10 @@ NAA:
 - Go into nano /etc/network/interfaces
 - And uncomment the two lines below the dhcp option.
 
--Configure the hosts file: nano /etc/hosts
+-Configure the hosts file: nano hosts
 
-192.168.111.130 R1
+[routers]
+R1
 
 -Configure ansible.cfg file: nano ansible.cfg
 

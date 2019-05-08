@@ -1,0 +1,29 @@
+#Simple play book to enable ospf
+
+---
+- name: Configure ospf
+  hosts: R1
+  gather_facts: false
+  connection: local
+  
+  vars:
+    cli:
+      username: admin
+      password: ansible
+  
+  tasks:
+    - name: enable ospf
+      ios_config:
+        provider: "{{ cli }}"
+        authorize: yes
+        parents: router ospf 1
+        lines:
+          - network 0.0.0.0 255.255.255.255 area 0
+      register: print_output
+      
+    - name: print the output
+      debug:
+        var: print_output.stdout_lines
+        
+#command to run:
+#ansible-playbook R1.yml 
