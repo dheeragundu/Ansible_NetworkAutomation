@@ -5,6 +5,18 @@ NAA:
 - Go into nano /etc/network/interfaces
 - And uncomment the two lines below the dhcp option.
 
+-Configure the hosts file: nano /etc/hosts
+
+192.168.111.130 R1
+
+-Configure ansible.cfg file: nano ansible.cfg
+
+[defaults]
+hostfile = ./hosts
+host_key_checking = false
+timeout = 5
+
+
 R1:
 - Configure FastEthernet0/0 to receive ip address via dhcp
 
