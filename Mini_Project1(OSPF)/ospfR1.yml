@@ -26,4 +26,4 @@
         var: print_output.stdout_lines
         
 #command to run:
-#ansible-playbook R1.yml 
+#ansible-playbook ospfR1.yml
