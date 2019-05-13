@@ -7,8 +7,8 @@
 
   vars:
     cli:
-      username: david
-      password: cisco
+      username: admin
+      password: ansible
 
   tasks:
     - name: Global config settings
