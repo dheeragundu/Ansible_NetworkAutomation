@@ -1,0 +1,19 @@
+#Simple playbook that lets you gather arp information
+
+---
+- name: Get ARP information
+  hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: show arp
+      raw: "show arp"
+      register: print_output
+      
+    - name: print output
+      debug:
+        var: print_output.stdout_lines
+        
+#Command to run:
+#ansible-playbook getarp.yml -u <your username> -k
+    
