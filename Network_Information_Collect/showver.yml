@@ -1,0 +1,25 @@
+#Playbook that backs  up results of our ios_commands to a file created in the  following format <hostname.txt> in  a directory called output.
+
+
+---
+- name: Backup show version and other user level commands
+  hosts: all
+  order: sorted  # sorting so our play outputs are outputted in alphabetical order
+  gather_facts: false
+  connection: local # The play is processed locally and only the commands are run on the ios device.
+  
+  tasks:
+    - name: run commands on remote devices
+      ios_command:
+        commands:
+          - show version
+      register: print_output
+      
+    - name: print the output
+      debug:  # module
+        var: print_output.stdout_lines # provdies stdout as a list of strings, each containing one iterm per line. i.e, stdout printed line by line.
+    
+    - name: save output file  to  sepcified  directory
+      copy: # module
+        content: "{{ print_output.stdout[0]  }}"
+        dest: "./output/{{ inventory_hostname )).txt"
