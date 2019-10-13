@@ -1,0 +1,12 @@
+#The hosts file in our root directory that we use for our inventory
+
+root@NetworkAutomation-1:~# cat gns3hosts 
+[gns3-core]
+S1
+S2
+
+[gns3-access]
+S3
+S4
+S5
+root@NetworkAutomation-1:~#
